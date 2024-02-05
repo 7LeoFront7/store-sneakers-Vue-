@@ -1,27 +1,46 @@
 <script setup>
 import axios from 'axios'
-import { onMounted, ref } from 'vue'
+import { onMounted, reactive, ref, watch } from 'vue'
 
 import CardList from './components/CardList.vue'
 import Header from './components/Header.vue'
 
 const items = ref([])
 
-onMounted(async () => {
-	// fetch('https://6775711df541414e.mokky.dev/items')
-	// 	.then((res) => res.json())
-	// 	.then((data) => {
-	// 		console.log(data)
-	// 	})
-	try {
-		const { data } = await axios.get('https://6775711df541414e.mokky.dev/items')
+const filters = reactive({
+	sortBy: 'title',
+	searchQuery: ''
+})
 
+const onChangeSelect = (e) => {
+	filters.sortBy = e.target.value
+}
+
+const onChangeInput = (e) => {
+	filters.searchQuery = e.target.value
+}
+
+const fetchFilterItems = async () => {
+	try {
+		const params = {
+			sortBy: filters.sortBy
+		}
+
+		if (filters.searchQuery) {
+			params.title = `*${filters.searchQuery}*`
+		}
+		const { data } = await axios.get('https://6775711df541414e.mokky.dev/items', {
+			params
+		})
 		items.value = data
 	} catch (err) {
 		console.log(err)
 	}
+}
 
-})
+
+onMounted(fetchFilterItems)
+watch(filters, fetchFilterItems)
 
 </script>
 
@@ -35,15 +54,15 @@ onMounted(async () => {
 			<div class='flex justify-between items-center'>
 				<h2 class='text-3xl font-bold mb-8'>Все кроссовки</h2>
 				<div class="flex gap-4">
-					<select class='py-2 px-3 border rounded-md outline-none'>
-						<option>По названию</option>
-						<option>По цене (Дорогие)</option>
-						<option>По цене (Дешевые)</option>
+					<select @change="onChangeSelect" class='py-2 px-3 border rounded-md outline-none'>
+						<option value="name">По названию</option>
+						<option value="-price">По цене (Дорогие)</option>
+						<option value="price">По цене (Дешевые)</option>
 					</select>
 					<div class="relative">
 						<img class="absolute left-4 top-3" src="/search.svg">
-						<input class='border rounded-md py-2 pl-11 pr-4 outline-none focus:border-gray-400' type="text"
-							placeholder="Поиск...">
+						<input @input="onChangeInput" class='border rounded-md py-2 pl-11 pr-4 outline-none focus:border-gray-400'
+							type="text" placeholder="Поиск...">
 					</div>
 				</div>
 
