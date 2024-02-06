@@ -1,11 +1,42 @@
 <script setup>
+import axios from 'axios'
+import { computed, inject, ref } from 'vue'
 import CartItemList from './CartItemList.vue'
 import DrawerHeader from './DrawerHeader.vue'
+import infoBlock from './infoBlock.vue'
 
-defineProps({
+const props = defineProps({
 	totalPrice: Number,
-	vatPrice: Number
+	vatPrice: Number,
+
 })
+
+const { cart, closeDrawer } = inject('cart')
+
+const isCreatingOrder = ref(false)
+const orderId = ref(null)
+const createOrder = async () => {
+	try {
+		isCreatingOrder.value = true
+		const { data } = await axios.post(`https://6775711df541414e.mokky.dev/orders`, {
+			items: props.cart,
+			totalPrice: props.totalPrice.value
+		})
+
+		cart.value = []
+
+		orderId.value = data.id
+		return data
+	} catch (err) {
+		console.log(err)
+	} finally {
+		isCreatingOrder.value = false
+	}
+}
+
+
+const cartEmpty = computed(() => cart.value.length === 0)
+const cartButtonDisabled = computed(() => isCreatingOrder.value || cartEmpty.value)
 
 </script>
 <template>
@@ -13,26 +44,42 @@ defineProps({
 	<div class="bg-white w-96 h-full flex flex-col fixed top-0 right-0 z-20 p-8">
 
 		<DrawerHeader />
-		<CartItemList />
 
-		<div class='flex flex-col gap-4 mb-6 mt-7'>
-			<div class='flex gap-2'>
-				<span>Итого:</span>
-				<div class="flex-1 border-b border-dashed"></div>
-				<b>{{ totalPrice }} ₽</b>
-			</div>
 
-			<div class='flex gap-2'>
-				<span>Налог 7%:</span>
-				<div class="flex-1 border-b border-dashed"></div>
-				<b>{{ vatPrice }} ₽</b>
-			</div>
+		<div v-if="!totalPrice || orderId" class="flex h-full items-center">
+			<infoBlock v-if="!totalPrice && !orderId" title='Корзина пустая'
+				description='Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ' image-url='/package-icon.png' />
 
-			<button disabled
-				class='bg-lime-500 w-full mt-4 disabled:cursor-not-allowed rounded-xl py-3 text-white hover:bg-lime-600 transition active:bg-lime-700 disabled:bg-slate-300'>Оформить
-				заказ
-			</button>
+			<infoBlock v-if='orderId' title='Заказ оформлен'
+				:description='`Ваш заказ #${orderId} скоро будет передан курьерской доставке`'
+				image-url='/order-success-icon.png' />
 		</div>
+
+
+
+		<div v-else>
+			<CartItemList />
+
+			<div class='flex flex-col gap-4 mb-6 mt-7'>
+				<div class='flex gap-2'>
+					<span>Итого:</span>
+					<div class="flex-1 border-b border-dashed"></div>
+					<b>{{ totalPrice }} ₽</b>
+				</div>
+
+				<div class='flex gap-2'>
+					<span>Налог 7%:</span>
+					<div class="flex-1 border-b border-dashed"></div>
+					<b>{{ vatPrice }} ₽</b>
+				</div>
+
+				<button :disabled='cartButtonDisabled' @click='createOrder'
+					class='bg-lime-500 w-full mt-4 disabled:cursor-not-allowed rounded-xl py-3 text-white hover:bg-lime-600 transition active:bg-lime-700 disabled:bg-slate-300'>Оформить
+					заказ
+				</button>
+			</div>
+		</div>
+
 
 
 	</div>
