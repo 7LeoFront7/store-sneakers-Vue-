@@ -25,6 +25,7 @@ const fetchFavorites = async () => {
 		const { data: favorites } = await axios.get('https://6775711df541414e.mokky.dev/favorites')
 		items.value = items.value.map(item => {
 			const favorite = favorites.find((favorite) => favorite.parentId === item.id)
+
 			if (!favorite) {
 				return item
 			}
@@ -63,6 +64,32 @@ const fetchFilterItems = async () => {
 	}
 }
 
+const addToFavorite = async (item) => {
+
+	try {
+		item.isFavorite = !item.isFavorite
+
+		if (item.isFavorite) {
+			const obj = {
+				parentId: item.id
+			}
+
+
+			const { data } = await axios.post(`https://6775711df541414e.mokky.dev/favorites`, obj)
+
+			item.favoriteId = data.id
+
+		} else {
+			await axios.delete(`https://6775711df541414e.mokky.dev/favorites/${item.favoriteId}`)
+			item.favoriteId = null
+		}
+	} catch (err) {
+		console.log(err)
+	}
+
+
+}
+
 
 onMounted(async () => {
 	await fetchFilterItems()
@@ -97,7 +124,7 @@ watch(filters, fetchFilterItems)
 			</div>
 
 			<div class="mt-5">
-				<CardList :items='items' />
+				<CardList :items='items' @addToFavorite='addToFavorite' />
 			</div>
 
 
