@@ -2,6 +2,11 @@
 import CartItemList from './CartItemList.vue'
 import DrawerHeader from './DrawerHeader.vue'
 
+defineProps({
+	totalPrice: Number,
+	vatPrice: Number
+})
+
 </script>
 <template>
 	<div class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-70"></div>
@@ -14,13 +19,13 @@ import DrawerHeader from './DrawerHeader.vue'
 			<div class='flex gap-2'>
 				<span>Итого:</span>
 				<div class="flex-1 border-b border-dashed"></div>
-				<b>12990 ₽</b>
+				<b>{{ totalPrice }} ₽</b>
 			</div>
 
 			<div class='flex gap-2'>
-				<span>Налог 5%:</span>
+				<span>Налог 7%:</span>
 				<div class="flex-1 border-b border-dashed"></div>
-				<b>900 ₽</b>
+				<b>{{ vatPrice }} ₽</b>
 			</div>
 
 			<button disabled
