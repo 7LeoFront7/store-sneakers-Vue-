@@ -126,17 +126,17 @@ watch(cart, () => {
 
 <template>
 	<div class='flex justify-between items-center'>
-		<h2 class='text-3xl font-bold mb-8'>Все кроссовки</h2>
+		<h2 class='text-3xl font-bold mb-8'>{{ $t('homeTitle') }}</h2>
 		<div class="flex gap-4">
 			<select @change="onChangeSelect" class='py-2 px-3 border rounded-md outline-none'>
-				<option value="name">По названию</option>
-				<option value="-price">По цене (Дорогие)</option>
-				<option value="price">По цене (Дешевые)</option>
+				<option value="name">{{ $t('ByName') }}</option>
+				<option value="-price">{{ $t('ForThePrice') }}</option>
+				<option value="price">{{ $t('ByPrice') }}</option>
 			</select>
 			<div class="relative">
 				<img class="absolute left-4 top-3" src="/search.svg">
 				<input @input="onChangeInput" class='border rounded-md py-2 pl-11 pr-4 outline-none focus:border-gray-400'
-					type="text" placeholder="Поиск...">
+					type="text" placeholder="Nike Air M ...">
 			</div>
 		</div>
 

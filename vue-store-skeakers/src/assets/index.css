@@ -3,5 +3,10 @@
 @tailwind utilities;
 
 body {
-	background-color: rgb(247 254 231);
+	background-color: rgb(30, 27, 51);
+}
+
+.active {
+	background-color: #c52a5e;
+	color: #fff;
 }

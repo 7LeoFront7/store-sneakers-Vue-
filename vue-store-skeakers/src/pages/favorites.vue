@@ -16,7 +16,7 @@ onMounted(async () => {
 </script>
 
 <template>
-	<h2 class='text-3xl font-bold mb-8'>Мои избранные</h2>
+	<h2 class='text-3xl font-bold mb-8'>{{ $t('MyFavorites') }}</h2>
 
 	<CardList :items='favorites' is-favorite />
 </template>

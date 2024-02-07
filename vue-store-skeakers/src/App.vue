@@ -3,6 +3,27 @@ import { computed, provide, ref, watch } from 'vue'
 import Drawer from './components/Drawer.vue'
 import Header from './components/Header.vue'
 
+
+const languageRuActive = ref(true)
+const languageEnActive = ref(false)
+
+
+
+const activeBtnLangRu = () => {
+	if (!languageRuActive.value) {
+		languageEnActive.value = false
+		languageRuActive.value = true
+	}
+}
+
+const activeBtnLangEn = (e) => {
+	if (!languageEnActive.value) {
+		languageEnActive.value = true
+		languageRuActive.value = false
+	}
+}
+
+
 /*===========Корзина===(START)===========*/
 const cart = ref([])
 const drawerOpen = ref(false)
@@ -39,6 +60,25 @@ const openDrawer = () => {
 	drawerOpen.value = true
 }
 
+const translateTitleSneakers = (str) => {
+	const arrStr = str.split(' ')
+	if (arrStr[0] === 'Мужские') {
+		arrStr[0] = `Men's`
+		arrStr[1] = 'Sneakers'
+	}
+	arrStr[0] = 'Sneakers'
+	let EnStr = arrStr.join().replaceAll(',', ' ')
+	return EnStr
+}
+
+provide('language', {
+	languageRuActive,
+	languageEnActive,
+	activeBtnLangRu,
+	activeBtnLangEn,
+	translateTitleSneakers
+})
+
 provide('cart', {
 	cart,
 	closeDrawer,
@@ -56,7 +96,8 @@ provide('cart', {
 	<Drawer v-if='drawerOpen' :total-price='totalPrice' :vatPrice='vatPrice' />
 
 	<div class="bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14">
-		<Header :total-price='totalPrice' @open-drawer='openDrawer' />
+		<Header :languageRuActive='languageRuActive' :languageEnActive='languageEnActive' :activeBtnLangRu='activeBtnLangRu'
+			:activeBtnLangEn='activeBtnLangEn' :total-price='totalPrice' @open-drawer='openDrawer' />
 
 		<div class="p-10">
 			<router-view></router-view>
@@ -64,4 +105,3 @@ provide('cart', {
 	</div>
 </template>
 
-<style scoped></style>

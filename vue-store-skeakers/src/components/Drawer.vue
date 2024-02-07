@@ -11,7 +11,8 @@ const props = defineProps({
 
 })
 
-const { cart, closeDrawer } = inject('cart')
+const { cart } = inject('cart')
+
 
 const isCreatingOrder = ref(false)
 const orderId = ref(null)
@@ -34,6 +35,8 @@ const createOrder = async () => {
 	}
 }
 
+const { languageRuActive, languageEnActive } = inject(['language'])
+
 
 const cartEmpty = computed(() => cart.value.length === 0)
 const cartButtonDisabled = computed(() => isCreatingOrder.value || cartEmpty.value)
@@ -47,12 +50,16 @@ const cartButtonDisabled = computed(() => isCreatingOrder.value || cartEmpty.val
 
 
 		<div v-if="!totalPrice || orderId" class="flex h-full items-center">
-			<infoBlock v-if="!totalPrice && !orderId" title='Корзина пустая'
+			<infoBlock v-if="!totalPrice && !orderId && languageRuActive" title='Корзина пустая'
 				description='Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ' image-url='/package-icon.png' />
+			<infoBlock v-if="!totalPrice && !orderId && languageEnActive" title='Shopping cart empty'
+				description='Add at least one pair of sneakers to place an order' image-url='/package-icon.png' />
 
-			<infoBlock v-if='orderId' title='Заказ оформлен'
+			<infoBlock v-if='orderId && languageRuActive' title='Заказ оформлен'
 				:description='`Ваш заказ #${orderId} скоро будет передан курьерской доставке`'
 				image-url='/order-success-icon.png' />
+			<infoBlock v-if='orderId && languageEnActive' title='The order has been placed'
+				:description='`Your order #${orderId} will be delivered by courier soon`' image-url='/order-success-icon.png' />
 		</div>
 
 
@@ -62,20 +69,22 @@ const cartButtonDisabled = computed(() => isCreatingOrder.value || cartEmpty.val
 
 			<div class='flex flex-col gap-4 mb-6 mt-7'>
 				<div class='flex gap-2'>
-					<span>Итого:</span>
+					<span>{{ $t('total') }}:</span>
 					<div class="flex-1 border-b border-dashed"></div>
-					<b>{{ totalPrice }} ₽</b>
+					<b v-if='languageRuActive'>{{ totalPrice }} ₽</b>
+					<b v-if='languageEnActive'>{{ Math.round(totalPrice / 90) }} $</b>
 				</div>
 
 				<div class='flex gap-2'>
-					<span>Налог 7%:</span>
+					<span>{{ $t('tax') }} 7%:</span>
 					<div class="flex-1 border-b border-dashed"></div>
-					<b>{{ vatPrice }} ₽</b>
+					<b v-if='languageRuActive'>{{ vatPrice }} ₽</b>
+					<b v-if='languageEnActive'>{{ Math.round(vatPrice / 90) }} $</b>
 				</div>
 
-				<button :disabled='cartButtonDisabled' @click='createOrder'
-					class='bg-lime-500 w-full mt-4 disabled:cursor-not-allowed rounded-xl py-3 text-white hover:bg-lime-600 transition active:bg-lime-700 disabled:bg-slate-300'>Оформить
-					заказ
+				<button :disabled='cartButtonDisabled' @click='createOrder' class='bg-rose-600 w-full mt-4 disabled:cursor-not-allowed rounded-xl
+					 py-3 text-white hover:bg-rose-700 transition active:bg-rose-800 disabled:bg-slate-300'>
+					{{ $t('placeAnOrder') }}
 				</button>
 			</div>
 		</div>
