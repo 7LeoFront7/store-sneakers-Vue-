@@ -20,7 +20,7 @@ const i18n = createI18n({
 })
 
 const routes = [
-	{ path: '/index.html', name: 'Home', component: Home },
+	{ path: '/', name: 'Home', component: Home },
 	{ path: '/favorites', name: 'Favorites', component: Favorites },
 ]
 
