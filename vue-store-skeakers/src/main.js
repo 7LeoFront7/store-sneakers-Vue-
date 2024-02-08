@@ -20,7 +20,7 @@ const i18n = createI18n({
 })
 
 const routes = [
-	{ path: '/', name: 'Home', component: Home },
+	{ path: '/vue-store-skeakers', name: 'Home', component: Home },
 	{ path: '/favorites', name: 'Favorites', component: Favorites },
 ]
 
