@@ -12,7 +12,7 @@ import Favorites from './pages/favorites.vue'
 const app = createApp(App)
 
 const i18n = createI18n({
-	locale: document.cookie.split('=')[1],
+	locale: 'RU',
 	messages: {
 		RU: RU,
 		EN: EN
