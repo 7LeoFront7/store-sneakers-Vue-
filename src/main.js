@@ -6,8 +6,8 @@ import App from './App.vue'
 import './assets/index.css'
 import EN from './local/en.json'
 import RU from './local/ru.json'
-import Favorites from './pages/Favorites.vue'
 import Home from './pages/Home.vue'
+import Favorites from './pages/favorites.vue'
 
 const app = createApp(App)
 
