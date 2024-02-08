@@ -10,3 +10,9 @@ body {
 	background-color: #c52a5e;
 	color: #fff;
 }
+
+@media screen and (max-width: 600px) {
+	body {
+		background-color: #fff;
+	}
+}

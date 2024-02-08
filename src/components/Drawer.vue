@@ -44,7 +44,7 @@ const cartButtonDisabled = computed(() => isCreatingOrder.value || cartEmpty.val
 </script>
 <template>
 	<div class="fixed top-0 left-0 h-full w-full bg-black z-10 opacity-70"></div>
-	<div class="bg-white w-96 h-full flex flex-col fixed top-0 right-0 z-20 p-8">
+	<div class="bg-white w-80 sm:w-96 h-full flex flex-col fixed top-0 right-0 z-20 p-8">
 
 		<DrawerHeader />
 

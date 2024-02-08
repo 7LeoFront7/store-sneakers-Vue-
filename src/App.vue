@@ -95,7 +95,7 @@ provide('cart', {
 <template>
 	<Drawer v-if='drawerOpen' :total-price='totalPrice' :vatPrice='vatPrice' />
 
-	<div class="bg-white w-4/5 m-auto rounded-xl shadow-xl mt-14">
+	<div class="bg-white w-full sm:w-4/5 m-auto sm:rounded-xl shadow-xl sm:mt-14">
 		<Header :languageRuActive='languageRuActive' :languageEnActive='languageEnActive' :activeBtnLangRu='activeBtnLangRu'
 			:activeBtnLangEn='activeBtnLangEn' :total-price='totalPrice' @open-drawer='openDrawer' />
 
