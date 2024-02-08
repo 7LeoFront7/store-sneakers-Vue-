@@ -127,7 +127,7 @@ watch(cart, () => {
 <template>
 	<div class='flex-col xl:flex-row flex justify-between xl:items-center'>
 		<h2 class='text-3xl font-bold mb-8'>{{ $t('homeTitle') }}</h2>
-		<div class="flex w-full xl:justify-end flex-col md:flex-row gap-4">
+		<div class="flex w-full xl:w-3/4 xl:justify-end flex-col md:flex-row gap-4">
 			<select @change="onChangeSelect" class=' py-2 h-10 px-3 border rounded-md outline-none'>
 				<option value="name">{{ $t('ByName') }}</option>
 				<option value="-price">{{ $t('ForThePrice') }}</option>
